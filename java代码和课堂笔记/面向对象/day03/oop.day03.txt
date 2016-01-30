@@ -1,0 +1,140 @@
+Core Java Day02
+2012/1/11
+====================
+关于类:
+  一个Java源文件只能有一个public class
+  文件名与公有类类名一致
+  源文件中可以有多个类, 但是不能都是公有的
+  如果没有公有类, 文件名与某个类类名一致
+  
+  一般情况下: 一个源文件一个类, 类是公有的!
+  类体(class body)中的成员:
+    属性
+    方法
+    构造器
+    语句块(以后讲, 很少用) 
+  成员不能重复!
+    属性名不能重复
+    方法签名不能重复
+    构造器签名不能重复
+  
+1 方法签名(方法的识别关键字)
+   方法签名 = 方法名+参数类型列表
+   Java 类中不能存在相同方法签名的方法
+   
+   方法重载: 方法名一样, 方法签名不同的方法
+   
+   char[] chs = {'A','B','C'};
+   int[] ary = {'A','B','C'};
+   System.out.println(chs);//ABC// println(char[])
+   System.out.println(ary);//[[@34ADCD//println(Object)
+   System.out.println(ary.toString());// [[@34ADCD
+   System.out.println('A');//A // println(char) 打印字符
+   System.out.println(65);//65// println(int) 打印整数
+                               打人
+                               打牌
+   方法重载就是: 动词的多意现象, 打人, 打牌, 打酱油, 打车
+   就是行为的多态
+   
+   洗衣服, 洗手, 洗照片
+   
+   保存联系人, 保存通话记录, 保存访问过的地址
+   save(Contact) save(Log) save(Url) save(Message)
+    
+2 java方法参数的传递规则: 基于值的传递, 是变量值的复制, 
+  1) 基本类型就是其中值的复制, 
+  2) 引用类型是引用值(地址)的复制, 对象不复制!
+  案例: ParamaterDemo.java
+  * 变量的值: a 基本类型的值是其本身,
+           b 引用变量的值是一个地址值,是被引用对象的首地址.
+  为了避免引用参数传递的副作用, 建议一切结果使用
+  返回值带回. 
+
+继承, 类型的继承
+继承涉及到语法: 
+  属性, 方法
+  构造器, 方法覆盖
+
+3 继承 用来表达概念上具体化延续的具体概念.
+ 1 * 子类继承父类的属性和方法
+ 2 * 构造器不能继承！
+ 3 实例化子类，会递归分配所有父类的空间
+ 4 子类构造器一定调用父类构造器
+ 
+ * 类一定有构造器
+
+4 关于继承中的构造器：
+ 1 * 子类构造器中, 一定调用父类构造器。
+ 2 子类构造器 默认调用父类无参数构造器！
+ 3 如果父类没有无参数构造器，就必须在子类中明确指定调用
+   父类的有参数构造器！
+ 4 使用super()调用父类构造器，必须写在子类构造器第一行
+	this() 必须写在子类构造器第一行
+ 5 编程建议：所有的类都提供无参数构造器！减少继承时候的
+   麻烦。
+ 
+5 关于对象的实例化过程：
+ 1 检查类是否加载，如果没有加载就加载这个类，
+   要加载所有父类。(读取.class文件到内存)
+   * 懒惰式加载（按需加载）：如果第一次用到就加载，
+   只加载一次。通过CLASSPATH指定的路径寻找类文件(.class)，
+   加载以后是一个对象，类型是Class。
+   获得这个类对象：Student.class-> Class 实例
+ 2 分配父类型空间, 按照属性分配空间, 属性自动初始化为"零"
+ 3 执行父类属性的初始化代码, 如: int a =1
+ 4 执行父类构造器代码
+ 5 父类构造器结束,返回子类构造器, 分配子类空间 
+ 	按照属性分配空间, 属性自动初始化为"零"
+ 6 执行子类属性的初始化代码, 如: int b =2
+ 7 执行子类构造器代码
+
+ 所有类默认继承于Object=>所有类都是Object(东西)=>啥都是东西
+ 继承表达"是"
+  
+7 继承中的语法现象
+ 1 父类型变量可以引用子类型的实例，父类型的实现是多态的！
+ 2 子类可以覆盖父类的方法，修改父类的行为。
+   * 方法覆盖：子类覆盖了父类“相同方法签名”的方法。
+   方法的覆盖是由方法动态绑定实现的，就是Java虚拟机运行
+   时候确定执行那个那个对象那个方法，java最终执行子类的方法。
+ 
+   
+作业:
+  1 练习课题案例
+  2 实现如下案例: 
+	设计图形（Shape）类及其子类（Circle、Rectangle）
+	（Shape 有属性: Point(x,y) 是图形位置, 
+	1）Shape提供计算面积方法area，子类覆盖
+	2) Shape提供检查是否包含指定坐标的方法，子类覆盖
+  3 试题(Question), 单选题(SingleChoice)和
+    多选题(MultiChoice)之间的继承关系 
+  要求: 
+   1) Question 包含题干属性(text) 
+   2) Question 包含检测标准答案的方法
+      boolean check(int[] answers)
+      answers 是用户提供的答案, 是单选就应该只有一个答案
+   3）MultiChoice和SingleChoice是Question类的子类，
+   	 MultiChoice 包含属性 
+   	 选项: String[] options
+   	 多选标准答案: int[] answers
+   	 
+   	 SingleChoice 包含属性 
+   	 选项: String[] options
+   	 单选标准答案: int answer
+   	 
+   4) 在MultiChoice实现参数为(String text, 
+   		String[] options, int[] answers)的构造方法，
+   	  其中:
+   	    text 是题干, 
+   	    options 是选项, 
+   	    answers 是多选标准答案, 是正确选项的序号
+   5) 在SingleChoice实现参数为(String text, 
+        Stirng[] options, int answer)的构造方法。
+       其中:
+   	    text 是题干, 
+   	    options 是选项, 
+   	    answer 是标准答案, 是正确选项的序号
+   6）在MultiChoice和SingleChoice类中重写
+      Question类check方法 提供具体的检查用户答案的逻辑
+
+预习: final static Object

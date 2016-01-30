@@ -1,0 +1,87 @@
+-------String类型---------
+1.String特性
+  (1)不可改变:String对象的内容是不能改变的.
+  	String str = "abc";//创建了一个对象,存储abc,然后将引用给str变量
+  	str = "efg";//又创建一个对象,存储efg,然后将引用给str变量
+  (2)字符串缓冲区
+  	用于字符串常量,缓冲区中的字符串对象可以共享
+  	String s1 = "abc";//在缓冲区中创建存储abc的对象,然后将引用给s1
+  	String s2 = "abc";//使用前面创建的存储abc的对象
+   注意:new String("abc")创建出来的对象不使用缓冲区
+2.常用String方法
+	char charAt(int index) 
+	int length() 
+	String toLowerCase()  
+	String toUpperCase()
+	String trim()
+	int compareTo(String anotherString) 
+	int compareToIgnoreCase(String str) 
+	boolean equals()
+	boolean equalsIgnoreCase()
+	boolean startsWith(String prefix) 
+	boolean endsWith(String suffix) 
+	int indexOf(int ch) 
+	int lastIndexOf(int ch) 
+	String replace(char oldChar, char newChar) 
+	String replaceAll(String regex, String replacement) 
+	String[] split(String regex) 
+	String substring(int beginIndex) 
+	static String valueOf(boolean b) 
+-----------StringBuffer\StringBuilder--------------
+1.StringBuffer\StringBuilder特性
+   (1)都是可变字符序列，拥有相同的方法API
+   (2)StringBuffer线程安全的
+      StringBuilder线程不安全,从1.5版本开始有
+2.StringBuffer\StringBuilder方法
+	StringBuilder append(boolean b) 
+	StringBuilder delete(int start, int end) 大于等于start,小于end
+	StringBuilder insert(int offset, String str) 
+	StringBuilder reverse() 
+      
+------------正则表达式------------  
+1.相关类
+	Pattern:正则表达式的编译表示形式。 
+	Matcher:模式匹配器。
+2.正则表达式语法
+(1)字符 
+x 字符 x 
+\\ 反斜线字符 
+\t 制表符 ('\u0009') 
+\n 新行（换行）符 ('\u000A') 
+\r 回车符 ('\u000D') 
+
+(2)字符类 
+[abc] a、b 或 c（简单类） 
+[^abc] 任何字符，除了 a、b 或 c（否定） 
+[a-zA-Z] a 到 z 或 A 到 Z，两头的字母包括在内（范围） 
+
+(3)预定义字符类 
+. 任何字符（与行结束符可能匹配也可能不匹配） 
+\d 数字：[0-9] 
+\D 非数字： [^0-9] 
+\s 空白字符：[ \t\n\x0B\f\r] 
+\S 非空白字符：[^\s] 
+\w 单词字符：[a-zA-Z_0-9] 
+\W 非单词字符：[^\w] 
+
+(4)数量词
+X?    X，一次或一次也没有 
+X*    X，零次或多次 
+X+    X，一次或多次 
+X{n}  X，恰好 n 次 
+X{n,} X，至少 n 次 
+X{n,m} X，至少 n 次，但是不超过 m 次 
+
+(5)运算符 
+XY X 后跟 Y 
+X|Y X 或 Y 
+(X) X，作为捕获组 
+
+
+	
+	
+	
+	
+	
+	
+	

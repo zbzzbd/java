@@ -1,0 +1,110 @@
+OOP Day05
+2012/1/13
+====================
+
+1 abstract class 抽象类--不具体的类
+ 1) 抽象方法，只有行为的概念，没有具体的行为实现。
+   使用：abstract 关键字修饰，并且没有方法体。
+ 2) 包含抽象方法的类，就一定是抽象类。
+   使用： abstract 关键字修饰，包含抽象方法。
+  如：平面图形一定可以计算面积。
+
+ 3) 抽象类不能直接创建实例。可以定义引用变量。
+ 4) 抽象类只能被继承，一个具体类继承一个抽象类，必须实
+   现所有抽象方法。  
+ 5) 抽象方法和抽象类非常适合作为系统的分析和设计的工具。
+	public abstract class CRMSystem{
+	  public abstract Client add(Client newGuy);
+	  public abstract Event add(Event e, Client guy);
+	  public abstract Event[] todayEvents();
+	}
+
+2 接口, 相当于纯抽象类(cpp纯虚类)
+ 1 接口：全部的方法都是抽象方法，全部的属性都是常量。
+   接口用来表示纯抽象概念，没有任何具体的方法和属性。
+   public interface CRMSystem{
+	  Client add(Client newGuy);
+	  Event add(Event e, Client guy);
+	  Event[] todayEvents();
+   }
+ 2 不能实例化，可以定义变量。
+ 3 接口变量可以引用具体实现类的实例。
+ 4 接口只能被实现(继承)，一个具体类实现接口，必须使用全部的
+   抽象方法。
+ 5 接口之间可以继承。
+ 6 一个具体类可以实现多个接口，实现多继承现象，表示：
+ 一个概念即是XXX也是XXX.
+ 7 接口中的属性，默认是常量 public static final 
+ 8 接中的方法一定是:public abstract 
+ 9 实现一个接口，使用关键字implements, 实现实际上是
+   一种继承关系。接口和实现类是父子类型的关系
+
+
+1 Object
+ 1) Java 类默认继承于Object! -> 啥都是东西
+   继承了Object 的属性和方法
+   如: toString(),  hashCode(), equals() 
+ 2) toString() 方法, 经常有系统默认调用, 活动当前对象的
+ 文本描述, Object默认返回: 全限定名@hashCode
+  建议覆盖为: 当前对象的文本描述, (看着办)
+ 3) equals 是用来比较两个对象是否相等的方法。
+  区别：引用相等 与 对象相等
+  引用值相等： 使用 “==”
+  对象的内容相等： .equals() 方法
+  equals在Object类中声明，默认的比较规则是：比较引用
+  建议覆盖，实现对象的比较(比较对象的状态，就是比较对象
+  的数据)。
+  * 覆盖规则：
+  a 自反性：对于任何非空引用值 x，x.equals(x) 
+    都应返回 true。
+  b 对称性：对于任何非空引用值 x 和 y，当且仅当 
+    y.equals(x) 返回 true 时，x.equals(y) 
+    才应返回 true。
+  c 传递性：对于任何非空引用值 x、y 和 z，如果
+    x.equals(y) 返回 true，并且 y.equals(z) 返回 
+    true，那么 x.equals(z) 应返回 true。
+  d 一致性：对于任何非空引用值 x 和 y，多次调用
+     x.equals(y) 始终返回 true 或始终返回 false，
+     前提是对象上 equals 比较中所用的信息没有被修改。
+  e 对于任何非空引用值 x，x.equals(null) 都应返回 
+    false。
+ 4) hashCode() 
+  A hashCode()方法要与equals方法一同覆盖
+   a 当两个对象equals比较为true时候，这两个对象应该
+     具有相同的hashCode()值
+   b 当两个对象equals比较为false时候，这两个对象应该
+     具有尽可能不相同的hashCode()值
+   c hashCode() 值要稳定（一致性），一个对象创建以
+     后就不应该再变化
+  B 默认的hashCode() 值是当前堆对象地址转换的一个整数
+   这个整数不是内存地址。
+  C 一般使用对象的OID值作为hashCode的值。
+    OID 对象的唯一编号，在工程项目中一般采用数据库来
+    生成OID，也就是数据库中的“主键”
+ 
+作业:
+  1 复习并且全部使用课堂案例代码
+  2 重新写 类 Person, Student, Point, Circle, Book
+    按照JavaBean 规范书写, 并且提供如下方法覆盖:
+    toString() equals() hashCode()
+    创建测试案例: 测试 toString() equals() hashCode()
+    
+    提示: 对于有ID的类, 使用ID作为比较依据和hashCode()结果
+    
+		    
+    
+  3 测试全部课堂的正则表达式 
+    尝试编写规则: 电话号码可能有3-4位区号: 0415-5561111 
+  4 选做:
+   编写方法,实现从控制台读取点坐标, 并且解析返回Point对象
+  如果用户输入格式错误就重新输入.
+  提供解析方法: 
+    public static Point parse(String location)
+  提示:
+    使用 matches() 验证坐标规则
+    使用 split() 切分坐标
+    解析整数使用:Integer.parseInt(String str) -> int
+  
+预习: StringBuilder, StringBuffer, Java集合框架
+
+             

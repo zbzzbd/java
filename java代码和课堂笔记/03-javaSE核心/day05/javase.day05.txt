@@ -1,0 +1,142 @@
+Java SE Day05
+2012/1/31
+====================
+时间
+  时间的本质 long
+  时间的类型转换 long <-> Date <-> Calendar
+  时间的IO  String(年月日 时分秒)  <->  long  
+  时间的计算 
+    使用Calendar类提供的方法 set add get等
+  
+异常 
+  啥是异常
+ 
+
+1  时间日期
+  时间类的本质: Date = long + 操作
+              Calendar = long + 操作
+  时间的标准: (1970)GMT long   (0)UTC long
+  
+  1) java 中基本的时间表示 GMT long 
+  2) Java提供了Date类型表示时间和日期
+    Date 是long类型的包装
+  3) Calendar 是历法的的抽象.
+    历法: 公历, 农历, 太阳历, ...
+    GregorianCalendar 是历法的实现, 采用公历
+    (太阳历) 算法实现的. 
+    Calender cal = Calender.getInstance();
+  4) Date 和 Calendar 的默认值就是当前时间
+  
+  5) 时间的类型转换
+       new Date(long)
+         date.setTime(long)  cal.setTime(Date);
+         ---------->      --------->
+   long <---------- Date <---------  Calendar
+        date.getTime()     cal.getTime()     
+    	
+  6) 时间的计算
+    Calendar 提供丰富的时间计算方法  add() set() 等
+    如: 计算商品的促销日期special Date:
+    输入: 商品生产日期, 和保质期月份
+    返回: 商品的促销日期, 是过期前两周周的周五
+    
+  7) 日期的输入与输出, 
+  	日期输出: 的本质是 Date 转换为格式化的String
+  	日期输入: 的本质是 将格式化的String转换为Date
+    java.text.SimpleDateFormat fmt = 
+      new SimpleDateFormat("yyyy-MM-dd");
+     									
+    构建SimpleDateFormat 一般提供日期的格式
+     "yyyy-MM-dd" 具体参看 javadoc
+    如: "yyyy-MM-dd HH:mm:ss"
+       "yyyyMMdd"
+       "dd/MM/yyyy"
+       "MM/dd/yyyy"
+    
+    fmt.parse(String)可以实现将(合法)字符串解
+     析为日期类型, 经常用于处理日期输入.
+     
+    fmt.format(Date) 可以把日期格式化为字符串
+     用于输出处理.
+   
+2 异常(Exception)
+ 1) 异常的引出:  
+   A 行为(方法, 过程)的意外结果
+   B Java 的异常是方法的意外结束
+     如: nextLine() nextInt()
+ 2) Error和Exception的分类层次
+  Throwable 可抛出的, 是错误的跟, 包含异常类的实现代码
+    |--Error 是系统不可恢复的错误，由JVM发生
+    |   |--OutOfMemoryError 堆内存溢出
+    |   |--StackOverflowError 栈内存溢出
+    |--Exception 程序可以检查处理的异常,常见的异常继承根
+        |--java.text.ParseException format解析对象时候发生
+        |  如：Date d = dateformat.parse("2010-5-5");
+        |--RuntimeException 非检查异常，Javac忽略对
+             |      这类异常的语法检查，如：异常抛出，异常处理等。
+             |--IllegalArgumentException  
+             |--NullPointerException  *
+             |--ArrayIndexOutOfBoundsException * 
+             |--ClassCastException *
+             |--NumberFormatException * Integer.parseInt(S) 
+ 3) 异常的处理
+   A 使用try catch finally 捕获
+   B 声明抛出异常
+   
+   try catch finally
+  try 是尝试运程代码块，如果有异常会被随后的catch捕获
+  异常发生以后代码不执行
+  catch代码块是异常处理代码。需要提供合理的处理，异常的处理
+  是与具体业务逻辑有关。可以写多个catch处理一系列异常，但是
+  要注意：异常的大小关系，大类型的放到后面处理。
+
+  finally 代码块，不管是否出现异常，总会执行的代码块。
+  经常用来处理现场的清理，比如：可靠的数据库连接关闭。
+ 
+ 4) 异常的分类
+   A 检查异常 异常检查规则:
+     一个方法如果抛出了异常，这个方法就必须声明异常的抛出.
+     调用抛出异常的方法，必须处理异常
+   B 非检查异常
+     Javac忽略对RuntimeException 的检查, 包括子类型
+ 5) 异常的处理原则 与忌讳
+   A 能够底层处理的尽量处理，但是如果不能处理，必须抛出到
+   调用者（方法）。
+   B 建议在捕获到异常时候使用e.printStackTrace()，打印到
+   控制台，输出内容是：出现异常时候的方法调用堆栈.
+  
+   忌讳: 
+   A 不应该简单的抛弃。
+   B 不建议 粗粒度处理异常 如:catch(Exception e).
+   处理方式，依赖于具体业务逻辑，很灵活。
+     
+ 6) 异常的实例:
+     User reg( String pwd, String email)
+       throws UserExistException;
+     User login(String email, String pwd)
+       throws NameOrPwdException;
+     
+   自定义异常类一般继承于Exception
+   软件中会大量使用自定义异常，一般从Exception继承。
+    异常类命名要有实际意义, 一般都手工继承父类的构造器。
+   
+    
+ 
+ 作业 
+  1 复习实现全部课堂案例代码
+  2 用户帐号管理实现: 
+  
+  3 贪吃蛇
+  4 计算劳动合同的续签日
+	
+预习: java IO 流 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+      

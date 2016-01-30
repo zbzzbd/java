@@ -1,0 +1,68 @@
+一集合
+1.数据结构
+2.在软件开发中应用广泛。
+商品列表，播放列表
+3.Java中使用接口Collection定义集合的概念
+添加元素 / 删除元素 / 集合的交并差
+4.集合的实现类
+List：元素是有序的，可重复的。ArrayList / LinkedList / Vector 
+ArrayList: 用可变长数组的方式实现线形表集合
+LinkedList: 用双向循环链表的方式实现线形集合
+add / remove / get(i) / indexOf(o) / contains
+
+Set：元素是无序的，不可重复的。HashSet
+
+5。泛型
+集合中通常存放相同类型的对象
+泛型可以约束集合中元素的类型，减少编程错误
+强制类型转换都是自动和隐式进行的
+
+6。散列表的概念（Hash 哈希算法 / 散列算法）
+数据结构：成对存储键值对（key-value）.key不能重复，value可以重复
+1) 容量：散列数组的大小
+2) 散列运算：key-》对应散列下标的算法
+   "Mac".hashCode()%10 -> 3
+3) 散列桶：散列值相同的元素的“线性集合”
+4) 加载因子（load factor）小于75%
+6(元素数量) / 10(散列表容量) = 60%
+5) 散列查找：根据key计算散列值，根据散列值找到散列桶，
+在散列桶中顺序比较key，如果相同，返回此元素。
+6) 散列表中key不同，value可以重复。
+散列算法：不可逆的单向函数。key -> f(key)
+
+7.HashMap 常用方法: 
+put(key, value)
+constainsKey(key) //返回boolean,判断集合中是否包含key值
+get(key) //通过key找到value
+remove(key) //从集合中去除元素
+keySet() //返回key的集合，Set
+values() //返回值的结合，Collection
+
+8.集合的迭代(遍历)Iterator
+Java API中的接口Iterator描述的逐一遍历的方法。遍历购物车，遍历播放列表
+1) Iterator描述了一个线性结构（顺序结构）。有指针（游标）的概念。
+指针的初始位置在第一个元素之前。
+hasNext():当前指针的下一个位置有没有元素
+next():指针下移一位，取出当前位置的元素
+2)集合的方法remove /add / set 在迭代过程中不要使用
+如果需要在迭代的时候删除集合内容，使用迭代器自己的删除方法：remove
+移除当前指针指向的元素。
+
+9.集合元素的排序
+1)API ： 字符串(已经实现了Comparable接口并重定义了compareTo()方法，按字典排序) / 整型数据
+自定义对象类（自定义排序原则）
+
+2)比较器Comparator
+数据和比较原则分开。CallBack（回调）方式
+
+
+简单类型-->包装类（封装类）
+byte --> Byte
+short --> Short
+int --> Integer
+long --> Long
+double --> Double
+fload --> Float
+boolean --> Boolean
+char --> Charater
+

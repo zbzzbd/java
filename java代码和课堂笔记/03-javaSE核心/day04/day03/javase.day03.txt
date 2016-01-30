@@ -1,0 +1,167 @@
+Java SE Day03
+2012/1/18
+====================
+集合框架(有哪些集合)
+集合的迭代(集合元素的遍历)
+集合工具类
+比较大小(自定义排序)
+包装类
+
+1 集合框架 (Collection and Map, 集合与映射, 容器类(cpp))
+ 1) List 元素有先后次序的集合, 元素有index位置, 元素可以重复
+  继承与Collection接口, 实现类: ArrayList, Vector, LinkedList
+ 2) Set 元素无续, 不能重复添加, 是数学意义上的集合, 继承与
+  Collection 接口, 实现类: HashSet(是一个只有Key的HashMap)
+   
+ 3) Collection 集概念, 没有说明元素是否重复和有序, 使用集合的
+ 跟接口, 很少直接使用, 其他集合都是实现类: ArrayList, HashSet
+ 4) Map 描述了:(key:value) 成对放置的集合, key不重复, Value
+ 可以重复. key重复算一个. 实现类: HashMap(散列表算法实现)
+ TreeMap(二叉排序树实现,利用Key排序). Map适合检查查找.
+
+4 Java泛型简介
+ 1) Java5 以后提出的语法现象, 在编译期间期检查的类型约束.
+   运行期不检查泛型!
+ 2) 可以用来约束类中元素的类型
+  
+5 集合的迭代(遍历算法)(模仿了数鸡蛋的方式)
+ 1) 迭代操作: 播放列表 的 全部播放, 将扑克牌全部发放
+ 2) java使用Iterator 接口描述了迭代模式操作
+  Iterator 中的方法模式化设计, 专门配合while循环操作
+ 3) Iterator 的实例可以从集合对象获得, 是这个集合的一个元素序列
+ 视图, 默认包含一个操作游标, 在第一个元素之前, hasNext() 方法
+ 可以检查游标是否有下一个元素, next() 方法移动游标到下一个元素
+ 并且返回这个元素引用. 使用while配合这个两个方法, 可以迭代处理
+ 集合的所有元素
+ 4) 迭代时候可以使用迭代器remove() 方法删除刚刚迭代的元素
+ 在迭代过程中, 不能使用集合方法(add, remove, set) 更改集合
+ 元素
+
+6 Collections 集合的工具类, Arrays 数组的工具类
+ 1) 排序, 二分查找, 打乱, 填充等操作 
+
+7 比较大小
+ 1) Comparable 可以比较的 用于类实现, 实现这个接口表示: 这个
+  类的实例可以比较大小的. 可以进行自然排序.  Comparable
+  的实现必须与equals() 的结果一致, 就是相等的对象比较结果一定
+  是0! 
+ 2) Comparator 比较工具, 用于临时定义比较规则, 不是默认比较
+    规则
+
+8 java中的包装类
+ 1) 包装类可以把基本类型包装为对象类型
+ 2) 有八种包装类
+     int  Integer
+     long Long
+     byte Byte
+     short Short
+     float Float
+     double Double
+     boolean Boolean
+     char Character
+  3 包装类提供了 对应数据类型的工具方法
+    Integer.toHexString()
+    Integer.toString(int)
+    Integer.toBinaryString()
+    Integer.parseInt(String)
+    "3f"->int
+    Integer.parstInt(String, int)
+    
+    "2.718" -> 2.718 
+    Double.parseDouble(String str);
+    
+自动包装(auto boxing / unboxing)(java5 以后可以):
+  Integer i = 2;// i=new Integer(2);
+  Object o = 3.5;
+  System.out.println(o instanceof Double); //true
+  int a = i+1;// a = i.intValue() + 1;
+  
+注意 
+  1 包装类是final的类
+  2 包装类对象是不变的, 与字符串类似(不变模式)
+    Integer a = 1;
+    Integer b = 2;
+    a = a+b;
+    //a = new Integer(a.intValue() + b.intValue())
+  3 包装类覆盖了 toString equals hashCode compareTo
+注意 
+  1 包装类是final的类
+  2 包装类对象是不变的, 与字符串类似(不变模式)
+    Integer a = 1;
+    Integer b = 2;
+    a = a+b;
+    //a = new Integer(a.intValue() + b.intValue())
+  3 包装类覆盖了 toString equals hashCode compareTo
+  
+
+
+1 集合补遗
+  1) 集合复制, 默认的复制规则是浅表(浅层)复制
+   A clone() 方法
+    
+   B 使用复制构造器!
+   Map map = new HashMap();
+   Map map2 = new HashMap(map);
+   
+   List list1 = new ArrayList();
+   List list2 = new LinkedList(list1);
+  2) 同步化(线程安全的)
+   List list = new ArrayList();
+   //synchronizedList 可以将非线程安全的list包装为线程安全的
+   list = Collections.synchronizedList(list); 
+   转换以后就相当于 Vector
+   HashMap map = new HashMap(); 
+   //synchronizedMap 可以将非线程安全的map包装为线程安全的
+   map = Collections.synchronizedMap(map);
+     
+ 3) 数组与集合的转换
+  a 数组转List(只读的) 
+     String[] names = {"A","B","C"};
+     List list = Arrays.asList(names);//只读list
+     list = new ArrayList(list);//复制为全功能List
+     Set set = new HashSet(list);//复制为Set集合
+  b 集合转数组
+     Object[] ary1 = list.toArray();//集合转Object[]
+     String[] ary2 = (String[])
+     	list.toArray(new String[]{});//集合转制定类型数组
+  
+ 4) Collection 与 Collections
+   Collection 抽象的集合概念,
+   Collections 集合静态工具类, 包含集合的工具方法
+      (sort, 打乱(洗牌)等)
+ 
+ 5) Map的迭代, Map 是 [Key:Value] 组成的集合
+  A 对key:value 进行迭代
+    map.entrySet();
+  B 对Key进行迭代
+    map.keySet();
+  C 对Value进行迭代
+    map.values();
+  案例: 统计每个字符出现的次数
+  
+2 内部类- 定义在类的内部 的类， 根据位置分为4类
+  1) 静态内部类：使用static修饰，声明在类体中.
+  静态内部类中可以访问外部类的静态成员。
+ 
+  2) 成员内部类: 声明在类体中，不使用static，具有类的成员特征
+   也就是，必须有类的实例才能创建内部类实例。内部类实例
+   可以访问共享外部类的成员变量。很常用。
+   如：链表的节点就可以定义为内部类
+  3) 局部内部类：把类声明在方法中，就是局部内部类，作用域
+   类似局部变量。很少见。
+  4) 匿名内部类，匿名类：非常常见，可以写在任何地方,就像一般的语句。
+    语法更象是创建对象：
+    	Date d = new Date(){};
+    匿名类是对原类的一个继承，同时创建了实例，{} 就是继承
+    以后的类体。类体中可使用所有类的语法。
+    匿名类不能写构造器。
+    匿名类可以从抽象类或者接口继承，必须提供抽象方法的实现。
+  5) 任何内部类都编译成独立的class文件
+  6) 最大的作用：封装！封装内部概念:
+    情侣间的土豆和菜市场的土豆是不一样的
+  7) 通过实例简单理解记忆语法.在今后的案例中灵活练习内部类
+ 
+预习: Java Date, Java 异常, Java IO  
+  
+
+      

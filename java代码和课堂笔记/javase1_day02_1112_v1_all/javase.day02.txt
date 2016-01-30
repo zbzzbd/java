@@ -1,0 +1,197 @@
+Java SE Day02
+2012/1/17
+====================
+
+StringBuffer VS StringBuilder 
+  算法基本一样, 都是采用变长算法维护的char[], 以及对这个数组
+  内容进行"增删改查"操作组成
+  StringBuilder java 5 以后提供,性能好,非线程安全(不检查锁)
+  StringBuffer 早期Java 提供, 性能稍差, 线程安全(检查锁)
+  
+线性表
+散列表
+
+3 线性表: List, 表示有先后次序的对象集合, 歌曲列表
+  ArrayList = Object[] + 线性表操作(增删改查)  
+  StringBuilder = char[] + 操作(增删改查) 
+  
+  ArrayList(1.2以后新的) 是使用变长数组算法实现的 
+	List (线性表方法)
+  Vector(1.0) 是使用变长数组算法实现是 List 矢量 向量
+
+  LinkedList 是采用双向循环链表实现的List 接口中定义的方法
+  ArrayList 是利用变长数组算法实现的 List接口定义的方法
+  它们都是List, 使用感受差不多
+  LinkedList 在头尾插入/修改速度很快, 读取比较慢
+  ArrayList 本质是数组, 读取修改很快, 删除较慢
+  一般使用ArrayList多些
+
+List 集合的实现
+  1 LinkedList 采用双向循环链表实现
+  2 ArrayList 变长数组算法实现 新的 快 非线程安全
+  3 Vector 变长数组算法实现 早期提供 慢 线程安全
+                              
+
+4 线性表的应用
+  贪吃蛇
+  1 蛇是节点的(线性)集合,
+    节点在行列坐标(i,j)的位置
+  2 蛇可以走, 继续向当前方向走一步
+    也可以向指定方向走一步, 不能反向
+    蛇可以吃, 一个坐标上的东西.(以后再考虑)
+  3 蛇在一个面板中运行, 面板控制行列坐标
+    面板可以提供文字界面的打印方法, 显示出一条蛇
+  4 重构Worm类提供检查坐标是否在蛇身上的方法
+  5 提供测试类测试蛇的面板运行.
+
+5 Map   
+  1 HashMap 新
+  2 Hashtable 旧 (1.2以前)
+ 
+
+1 散列表  Map   
+
+ 散列表概念
+  1) 容量: 散列表中散列数组大小.
+  2) 散列运算: key->散列值(散列数组下标)的算法, 
+  	如: "mm".hashCode()%10->8
+  3) 散列桶: 	散列值相同的元素的"线性集合"
+  4) 加载因子: 就是散列数组加载率, 一般小于75%性能比较理想
+  	就是:元素数量/散列数组大小, 如: 7/10=70%
+  5) 散列查找: 根据Key计算散列值, 根据散列值(下标)找到
+    散列桶,在散列桶中顺序比较Key, 如果一样, 就返回value
+  6) 散列表中Key不同, Value可以重复
+  
+2 HashMap(关键字:值), 关键字key是唯一不重复的, 查找表
+ 1) key可以是任何对象, Value可以任何对象,
+ 2) key:value 成对的放置到集合中
+ 3) 重复的key算一个, 重复添加是替换操作
+ 4) 根据key的散列值计算散列表, 元素按照散列值(不可见)排序
+ 5) 默认的容量: 16 默认加载因子(加载率) 0.75
+ 6) 根据key检索查找value值
+ 7) 用于查找场合, 可以提高根据key查找效率
+
+ 8) HashMap VS Hashtable
+  A HashMap 新, 非线程安全, 不检查锁, 快
+  B Hashtable 旧 (1.2以前) 线程安全, 检查锁, 慢一点
+  
+3 集合框架 (Collection and Map, 集合与映射, 容器类(cpp))
+ 1) List 元素有先后次序的集合, 元素有index位置, 元素可以重复
+  继承与Collection接口, 实现类: ArrayList, Vector, LinkedList
+ 2) Set 元素无续, 不能重复添加, 是数学意义上的集合, 继承与
+  Collection 接口, 实现类: HashSet(是一个只有Key的HashMap)
+   
+ 3) Collection 集概念, 没有说明元素是否重复和有序, 使用集合的
+ 跟接口, 很少直接使用, 其他集合都是实现类: ArrayList, HashSet
+ 4) Map 描述了:(key:value) 成对放置的集合, key不重复, Value
+ 可以重复. key重复算一个. 实现类: HashMap(散列表算法实现)
+ TreeMap(二叉排序树实现,利用Key排序). Map适合检查查找.
+
+4 Java泛型简介
+ 1) Java5 以后提出的语法现象, 在编译期间期检查的类型约束.
+   运行期不检查泛型!
+ 2) 可以用来约束类中元素的类型
+  
+5 集合的迭代(遍历算法)(模仿了数鸡蛋的方式)
+ 1) 迭代操作: 播放列表 的 全部播放, 将扑克牌全部发放
+ 2) java使用Iterator 接口描述了迭代模式操作
+  Iterator 中的方法模式化设计, 专门配合while循环操作
+ 3) Iterator 的实例可以从集合对象获得, 是这个集合的一个元素序列
+ 视图, 默认包含一个操作游标, 在第一个元素之前, hasNext() 方法
+ 可以检查游标是否有下一个元素, next() 方法移动游标到下一个元素
+ 并且返回这个元素引用. 使用while配合这个两个方法, 可以迭代处理
+ 集合的所有元素
+ 4) 迭代时候可以使用迭代器remove() 方法删除刚刚迭代的元素
+ 在迭代过程中, 不能使用集合方法(add, remove, set) 更改集合
+ 元素
+
+6 Collections 集合的工具类, Arrays 数组的工具类
+ 1) 排序, 二分查找, 打乱, 填充等操作 
+
+7 比较大小
+ 1) Comparable 可以比较的 用于类实现, 实现这个接口表示: 这个
+  类的实例可以比较大小的. 可以进行自然排序.  Comparable
+  的实现必须与equals() 的结果一致, 就是相等的对象比较结果一定
+  是0! 
+ 2) Comparator 比较工具, 用于临时定义比较规则, 不是默认比较
+    规则
+
+8 java中的包装类
+ 1) 包装类可以把基本类型包装为对象类型
+ 2) 有八种包装类
+     int  Integer
+     long Long
+     byte Byte
+     short Short
+     float Float
+     double Double
+     boolean Boolean
+     char Character
+  3 包装类提供了 对应数据类型的工具方法
+    Integer.toHexString()
+    Integer.toString(int)
+    Integer.toBinaryString()
+    Integer.parseInt(String)
+    "3f"->int
+    Integer.parstInt(String, int)
+    
+    "2.718" -> 2.718 
+    Double.parseDouble(String str);
+    
+自动包装(auto boxing / unboxing)(java5 以后可以):
+  Integer i = 2;// i=new Integer(2);
+  Object o = 3.5;
+  System.out.println(o instanceof Double); //true
+  int a = i+1;// a = i.intValue() + 1;
+  
+注意 
+  1 包装类是final的类
+  2 包装类对象是不变的, 与字符串类似(不变模式)
+    Integer a = 1;
+    Integer b = 2;
+    a = a+b;
+    //a = new Integer(a.intValue() + b.intValue())
+  3 包装类覆盖了 toString equals hashCode compareTo
+注意 
+  1 包装类是final的类
+  2 包装类对象是不变的, 与字符串类似(不变模式)
+    Integer a = 1;
+    Integer b = 2;
+    a = a+b;
+    //a = new Integer(a.intValue() + b.intValue())
+  3 包装类覆盖了 toString equals hashCode compareTo
+  
+作业 
+  1 复习实现全部课堂案例代码
+  2 比较性能: 
+      a int i = 1; 重复 i=i+1
+      b Integer i = 1; 重复 i=i+1; 
+  3 创建一个List<String>集合, 添加多个测试数据
+    使用Collections.sort() 实现排序.
+    在排序结果中使用 Collections.binarySearch() 
+    查询一个字符串的位置序号.
+  4 测试集合HashSet 的全部方法.
+    add()
+    addAll();
+    remove()等
+  5 测试HashMap的全部方法
+    put()
+    get()
+    remove()
+    values() 等
+  
+  6 (选做)实现完整版MyArrayList.
+   参考: MyArrayList
+   
+  参考: 数组版本的发牌洗牌 corejava.day06.card1.CardDemo
+       集合版本的发牌洗牌 corejava.day06.card2.CardDemo
+      MyArrayList 实现参考: corejava.day06.list
+  
+预习: 内部类, 异常
+
+  
+  
+  
+  
+  
+  

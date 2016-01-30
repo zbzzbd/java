@@ -1,0 +1,154 @@
+异常对象（Exception）
+常见异常：NullPointerException
+		 ArrayIndexOfBoundsException
+		 ArithmeticException
+		 ParseException
+		 NumberFormatException
+		 ....
+
+处理方式：try-catch-finally 或 抛出
+
+try-catch-finally:
+把可能出现的异常放在try块中；
+一旦发生异常，此语句后的代码不执行
+只有一个catch块被进入。
+finally一定会进入，提供统一的出口。
+
+抛出：throws 
+声明中方法定义中
+对于已检查异常是必须要处理的，可以选择抛出。
+父子类继承关系中
+
+private < default < protected < public
+父类：
+public void method() 
+	throws ParseException, ArithmeticException {//...}
+子类：重写（Override）
+// 错的，子类的方法【不能】抛出比父类更大的异常
+public void method() throws Exception {//...}
+
+集合 / 异常 / 常用API(日期) / IO / 序列化 / 线程 / 网络编程
+
+一、Java I/O （In/Out）
+byte by byte 流
+1.File：用来表示文件或目录
+只是用来表示文件的信息（如果存在，名称、大小等），
+不能对文件的内容进行访问。
+
+File f = new File("file.txt");
+
+2.File基本API
+File(String path)
+long length(); //文件长度
+long lastModified; //最后一次修改时间
+String getName();//获取文件名
+String getPath();//获取文件路径
+String getAbsolutePath();//获取文件的绝对路径
+boolean exist();//是否存在
+boolean isFile();//是否文件
+boolean isDirection();//是否目录
+boolean mkDir();//创建文件夹
+boolean delete(); //删除文件
+boolean createNewFile();创建文件
+File[] listFiles(FileFilter filter);//返回满足过滤器条件的文件数组
+
+Absolute / Relative
+
+3.FileFilter 回调模式
+列出符合条件的文件对象，使用File[] listFiles(FileFilter filter);
+利用匿名类实现文件过滤的作用。
+dir *.java
+dir *.class
+
+4.io流
+byte by byte的字节流
+根据流的方向，输入流(in)和输出流(out)
+文件的模型：就byte by byte的数据集合
+
+data:     00 00 00 0f 4a 4d d0 .....
+index:     0  1  2  3  4  5  6 .....
+pointer:   ^
+
+数据：int -> 4 byte
+     double -> 8 byte
+     char -> 2 byte
+     String -> n char -> 2n byte
+     Student -> n byte
+任何数据都可以序列化为byte数据，byte序列可以反序列化为数据。
+         序列化
+数据 ---------------->  byte序列
+    <----------------
+       反序列化
+
+输入流(InputStream)：对文件模型的只读操作
+输出流(OutputStream): 对文件模型的只写操作
+
+流是一种操作数据的模型，认为任何数据都是由byte序列组成。
+从数据中，一个byte一个byte的读（或写）。
+
+5.字符编码
+文本在内存中是char[]，是16位无符号整数的有序集合。
+流：是byte[]类型的数据有序集合
+文本操作实际上是char[] --> byte[]数组，序列化，编码
+
+java中的char是unicode字符集的范围。(0-2^16)(0-65535)
+
+"AB中".getByte("GBK") --> byte[]
+1)GBK字符集：支持中文和英文，采用变长编码，1-2个字节
+英文：1个byte，中文：2个byte
+支持2万+字符集，包括子集(GB2312, 6k+)
+GBK不能支持全部的Unicode字符
+Unicode char[]{\u0041, \u0042, \u****}//AB中
+GBK:    byte[]{41, 42, d6, d0} //AB中
+
+2)Unicode的编码方案 utf-8 utf-16BE 支持unicode字符
+utf-16BE: 2字节编码直接对应于char的16位，
+英文和全部文字都采用定长编码。
+char[] {\0041, \u0042, \u4e2d}//AB中
+byte[] {00, 41, 00, 42, 4e, 2d}
+
+utf-8 变长编码， 1-6byte变长编码。
+其中英文1个byte，中文2个byte。
+char[] {\0041, \u0042, \u4e2d}//AB中
+byte {41, 42, 4e, 2d}
+
+6.输入流和输出流（InputStream / OutputStream）
+InputStream in = new FileInputStream("source");//source数据源
+
+OutputStream out = new FileOutputStream("destination");//目的地
+
+直接和数据源（操作系统的文件）交互，效率低。
+流是单向的，只能读或写。
+ 基本流 / 低级流 / 节点流 
+（过滤流 / 高级流 / 处理流）
+
+7.RandomAccessFile
+可以访问（读/写）一个文件中任意位置的字节信息。
+RandomAccessFile(String file, String mode)
+file：数据源
+mode：访问方式：r(只读) w(只写) rw(读写)
+RandomAccessFile对象维护一个指针，指向要读写的位置，
+可以随着读写的动作前后移动。
+
+常用方法：
+int read(); //读一个字节
+read(byte[])//读入到byte数组中
+void write()；//写一个字节
+write(byte[], offset, length)
+seek(long);//指针指向某个位置
+getFilePointer();获取到指针所在的位置
+
+读 / 写 / byte[]数组->String
+[65, 66, 67, -42, -48]
+
+字符 十六进制 十进制 
+A  : 0x41 --> 65
+B  : 0x42 --> 66
+C  : 0x43 --> 67
+
+中 : 0xd6 -->二进制(11010110) -->-42(十进制)
+二进制负数转换为十进制时：取反+1，前面加-号
+
+
+
+

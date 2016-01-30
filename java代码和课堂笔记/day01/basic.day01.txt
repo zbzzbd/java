@@ -1,0 +1,110 @@
+Java 语言基础 Day01
+2011/9/26
+====================
+1. Linux 简介
+ 1) 文件系统
+ 2) 当前工作目录, 就是当前正在使用的默认文件夹
+   文件夹=目录
+   pwd 打印(显示)当前工作目录
+ 3) 用户主目录(user home), 是属于当前登录用户个人的目录
+  个人主目录, 用户拥有对自己用户主目录全部管理权限.
+ 4) mkdir 创建文件夹
+   mkdir demo 在当前文件夹(工作目录)里创建文件夹demo
+  演示任务：
+  	1 显示当前目录，
+  	2 在当前目录下创建子目录，
+    3 检查目录是否创建成功
+ 5) cd 切换(更改)当前工作目录
+   .. 代表上层目录, cd .. 切换到上层目录
+   . 代表当前目录
+   cd 指定的目录
+   cd / 到跟目录
+   cd /home/soft01 到主目录
+   cd 命令默认返回用户主目录(user home)
+ 6) ls 显示文件夹内容
+ 7) 绝对路径和相对路径
+   A 以跟(root)"/" 为开始的路径是绝对路径
+   B 不是以"/" 开始的是相对路径, 相对路径默认相对于当前目录
+
+  练习任务：使用 pwd cd ls 漫游系统目录 /opt
+
+ 8) rm -rf dir 删除目录 
+   命令格式： rm -rf dir1 dir2 dir3 ...
+            rm file1 file2 ...
+    -r 表示递归删除子目录
+    -f 表示强制删除，不确认
+            
+ 9) 启动eclipse 
+   cd /opt/eclipse
+   ./eclipse
+ 
+2. Java 简介
+ 1) java 特点: 简单, 面向对象, 跨平台, 安全, 多线程支持
+ 2) java 的跨平台
+	Java 通过JVM 实现了跨平台技术
+	Java 源代码（*.java）经过Java的编译器编译成
+	Java字节码（*.class）,执行Java字节码，Java字节码
+	经过JVM的解释为具体平台的具体指令，并执行。
+	不同平台有不同的JVM，主流平台都提供了JVM。所以
+	JAVA字节码可以在所有平台上能够解释执行。在这个
+	意义上Java是跨平台的。也就是说：Java 的字节码
+	是跨平台的。
+ 3) Java JDK 
+ JDK java 开发 工具包 /opt/jdk  or /opt/jdk_1.6.01 
+  |-- bin 开发工具(命令：java,javac,jar,javad,jar,rmic,jps...)
+  |-- jre JRE Java运行环境
+       |-- lib (rt.jar) Java API(应用编程接口，系统类库)
+       |    (java 提供的现成组件)
+       |-- bin (java_vm)JVM Java虚拟机
+
+3. Java APP
+ 1) HelloWorld.java
+	package basic.day01;
+	/**
+	 * eclispe 自动将当前文件编译到：
+	 * workspace/JSD1105/bin/basic/day01/HelloWorld.class
+	 * (工作空间/项目/bin/包文件夹/类文件)
+	 * 执行时候, 执行这个类文件.
+	 * @author teacher
+	 */
+	public class HelloWorld {
+		//java 软件的入口方法
+		public static void main(String[] args) {
+			//在控制台输出“Hello World!”
+			System.out.println("Hello World!");
+		}
+	}
+ 2) Java 的编译
+ project
+   |--src
+   |   |--basic.day01
+   |   |         |-- HelloWorld.java
+   |   |--basic.day02
+   |   |         |-- JFrameHelloWorld.java
+   |--bin
+   |   |--basic.day01
+   |   |         |-- HelloWorld.class
+   |   |--basic.day02
+   |   |         |-- JFrameHelloWorld.class
+
+4. Java 的注释，被Javac(编译器)忽略的部分
+ 1 单行注释 // ...
+ 2 多行注释 /* */
+ 3 文档注释 /** */
+
+5. Eclipse(日食/月食)
+ 1) 来自IBM 开源, 有eclipse.org 基金会维护开发
+   是主流的Java开发平台,可以开发: PHP, Ruby, Android
+   SUN对这个软件很有意见.
+   eclispe 是Java开发的, 需要JDK来运行
+ 2) eclipse.org  下载
+ 3) JDK: java.sun.com 
+
+预习: java 变量类型, 运算符等
+
+
+
+
+
+
+

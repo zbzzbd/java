@@ -1,0 +1,55 @@
+Java SE2 Day05
+2012/2/7
+====================
+timer 
+
+Socket TCP
+
+反射API介绍
+
+
+4.Java Socket编程 TCP 协议编程
+ 1) TCP工作模型: 先找
+堂(主机/IP), 到食堂以后找窗口
+ (Socket/套接字 端口号), 服务员等待连接,客户向服务员发起连接
+ 连接以后, 一个窗口可以为每个客户安排一个服务员(线程)提供服务, 
+ 每个服务过程可以双向交流通讯(流), 通讯完成后要关闭连接.
+
+5. TCP 服务端编程(食堂)(java.io.*,java.net.*,java.lang.*)
+ 1) 创建ServerSocket实例绑定一个服务端口(Socket/套接字 端口号)
+ 2) 开始ServerSocket实例 的监听, 等待客户端的连接
+ 3) 如果有客户连接进来, 就获得了客户的套接字(Socket)实例
+   客户的套接字(Socket)实例中包括与客户端建立的连接流
+ 4) 为这个客户(Socket) 创建一个服务线程, 提供服务(run方法)
+ 5) 继续等待下一个连接, 返回到2)
+ 6) 服务线程 完成通讯服务过程
+ 
+ 7) 端口号: 0~65535, 1K以下留给系统使用
+ 
+6. TCP 客户端编程
+ 1) 创建Socket 实例, 连接到服务器端, 成功创建s就表示连接到了
+   服务器
+     Socket s = new Socket("host", port)
+ 2) 客户端 Socket 与服务器端 Socket 对应, 都包含输入, 输出流
+   客户端的s.getInputStream() 连接于服务器s.getOutputStream()
+   客户端的s.getOutputStream()连接于服务器s.getInputStream()
+ 3) 使用线程处理 网络流
+ 
+7. Java 反射
+ 1) 反射是Java自我管理(类, 对象)的机制
+ 2) * 可以通过反射机制发现对象的类型 发现类型的方法/属性/构造器
+ 3) * Java 反射 可以创建对象 并 访问任意对象方法和属性等
+ 4) Class 加载
+	 类加载到内存: java 将磁盘类文件加载到内存中,为一个对象(实例)
+	这个对象是Class的实例, 也就是 这些对象都是Class实例
+ 5)Class 实例代表Java中类型, 基本类型的类型: int.class, long.class
+  类类型 Class 实例获得如下:
+	Class cls = String.class;
+	Class cls = Class.forName("java.lang.String");
+	Class cls = "abc".getClass();
+  以上方法获得cls 是同一个对象, 就是String 类内存加载的结果
+  
+  
+  
+  
+  

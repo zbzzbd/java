@@ -1,0 +1,149 @@
+Java SE2 Day02
+2012/2/2
+====================
+
+流的功能扩展:(流的设计模式: 装饰器模式, 灵活组合扩展功能(积木))
+  InputStream / OutputStream Byte流(字节流)
+
+  基本类型的IO(int long ) DataOutputStream/DataInputStream
+  文本类型(编码) IO
+    Writer / Reader 字符流, 每次处理一个字符
+    InputStreamReader / OutputStreamWriter
+    BufferedReader(readLine()) / PrintWriter(println())
+    Scanner(Java 5)
+    Console(Java 6)
+    
+    Scanner s = new Scanner(System.in);
+    Random random = new Random();
+    
+    
+  对象的 IO
+  图片的 IO
+
+  
+6 DataOutputStream 对基本的输出流功能扩展, 提供了基本数据
+  类型的输出方法, 也就是基本类型是序列化方法
+  writeInt() writeDouble() 
+  是过滤器 
+             DOS       FOS
+  应用程序 -- 过滤器 -->输出流--> 文件(Byte)
+      writeInt(i)    write()   ff ff ff fd
+
+7 DataInputStream 对基本的输入流(InputStream)功能扩展,
+  提供基本类型的输入方法, 就是基本类型的反序列化 
+  DataInputStream 是过滤器, 只是功能扩展, 不能直接读取文件
+  readInt() readDouble() ...
+ 
+                  FIS      DIS    dis.readInt()
+ 文件(Byte 序列)--输入流--> 过滤器-->  应用程序 
+ [7f ff ff ff]   read()   readInt() 0x7fffffff            
+
+8 BufferedInputStream 和 BufferedOutputStream
+  一般打开(in/out)文件, 都加上缓冲流, 提高IO性能
+             DOS      BOS     FOS
+  应用程序 -- 过滤器-->过滤器-->输出流--> 文件(Byte)
+      writeInt(i)    write() write(byte[]) ff ff ff fd
+                      byte[]
+  FileInputStream fis = new FileInputStream(file);
+  BufferedInputStream bis = new BufferedInputStream(fis);
+  DataInputStream in = new DataInputStream(bis);
+
+  FileOutputStream fos = new FileOutputStream(file);
+  BufferedOutputStream bos = new BufferedOutputStream(fos);
+  DataOutputStream out = new DataOutputStream(bos);
+
+
+1 字符串的序列化(文字的编码方案)
+ 1) Stirng 字符串本质上是char[] 将char[] 转换成byte序列
+  就是字符串的编码, 就是字符串的序列化问题
+  
+  
+  
+  char是16位无符号整数, 值是unicode编码
+  
+  str.getBytes("GBK") 
+  
+  new String(byte[], "gbk")
+  
+  byte 流
+  
+  
+ 2) utf-16be 编码方案, 将16位char从中间切开为2个byte
+  utf-16be 是 将unicode char[] 序列化为byte[] 的编码方案 
+  能够支持65535 个字符编码, 英文浪费空间
+  char[] = ['A','B','中'] 
+  utf16be = [00, 41, 00, 42, 4e, 2d]
+  
+ 3) UTF-8 编码方案 采用变长编码 1~N方案, 其中英文1个byte
+  中文3个byte 
+  char[] = ['A','B','中'] 
+  utf8 = [41 42 e4 b8 ad]
+  
+  utf-8: 是将unicode 编码为 byte 序列的方案
+  
+  中:  4e2d = 0100111000101101 
+  
+  e4 b8 ad = 11100100 10111000 10101101
+             1110XXXX 10XXXXXX 10XXXXXX
+   
+   以0为开头的是 英文!(0~127)
+   110 表示连续2字节表示一个字符
+   1110 表示连续3字节表示一个字符
+   11110 表示连续4字节表示一个字符
+   每个数据字节以 10开头
+             
+ 4) GBK 中国国标,支持20000+ 中日韩英, 英文1Byte编码, 中2Byte
+ 与unicode不兼容, 需要码表转换(散列表查询)
+ char[] = ['A','B','中'] //4e2d 
+ GBK(GB2312): {41,42,d6,d0},
+
+5 认识文本和文本文件 
+ 1) java的文本(char)是16位无符号整数, 是字符的unicode编码
+ 2) 文件是byte by byte 的数据序列
+ 3) 文本文件是 文本char 序列按照某种(utf-8, utf-16be, gbk)
+  方案序列化为byte, 的存储结果.
+  
+6 字符流(Reader Writer) 
+ 1) 字符的处理, 一次处理一个字符(unicode)
+ 2) 字符的底层仍然是基本的字节流
+ 3) 字符流的基本实现: 
+    InputStreamReader:完成byte流解析为char流, 按照编码解析
+    OutputStreamWriter:提供char流到byte流, 按照编码处理
+
+ 4) 字符流的过滤器
+  是字符读写的功能扩展, 极大的方便了文本的读写操作
+   BufferedReader : readLine()
+   PrintWriter: println()
+   
+ 5)读取一个文本文件:
+	InputStream is = new FileInputStream("gbk.txt");
+	Reader in = new InputStreamReader(is);
+	BufferedReader reader = new BufferedReader(in);
+  or
+	BufferedReader in = new BufferedReader(
+		new FileReader(filename));
+ 6) 写出一个文本文件:
+   PrintWriter out = 
+	 new PrintWtirer(new FileWriter(filename));	
+  or
+     PrintWriter out = 
+	 new PrintWtirer(
+	 	new OutputStreamWriter(
+	 		new FileOutputStream(filename)));	
+ 7) 系统的默认编码 中文一般是GBK
+   String encoding=System.getProperty("file.encoding");
+
+   
+作业: 
+  1) 熟练课堂全部代码
+  2) (选项) 实现文件切分方法和合并方法 参考: IOUtils.split()  
+
+预习:
+   Timer 类, Java Socket编程, Swing
+    
+ 
+ 
+ 
+ 
+ 
+ 

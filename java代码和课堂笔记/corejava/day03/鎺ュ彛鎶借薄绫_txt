@@ -1,0 +1,128 @@
+JAVA面向对象之抽象、接口
+																	
+继承的设计动机
+	大家需要明确一个指导思想:继承的原始设计动机是抽象，即通过继承的做法，我们可以“抽象出像的代码”，并把这些代码放到父类里，在这基础上我们才可以继续讨论代码的重用的问题。
+	如果被代码的表现形式所迷惑，认为“继承是为了方便代码重用”，这种想法就忽视了继承概念里的本原问题，对后继的面向对象思想 的设计有相当在的危害!
+	继承从讲法上来讲，是非常简单的，但是它的设计动机却是非常深邃的，一方面，由于在语法里引入了继承。所以，在Java语言里，即使某些功能模块的设计初衷与当前项目的需求非常不匹配，但只要这些模块里有当前项目所需的功能点，或者这些与当前项目里的一些标志有逻辑上的从属关系，那么我们通过继承来重用现有的成果。另一方面，由于继承的思考方式直接来源于现实世界中的“归纳----演绎”的分析问题和解决问题的方式，所以在代码里，根据一些严密的逻辑，以较小的代价解决一些规模较大的问题。
+	
+	
+抽象类与抽象概念
+	通过继承，我们不仅可以通过归纳共性，减轻子类里的代码编写量，更可以从代码设计的角度上，通过为一些在逻辑上有从属关系的类建立”继承----从属”这样的关系，来优化代码结构。通过继承里的“抽象类”概念，我们更加可以体会到这点。
+	我们可以把一些类的仅有我到抽象类里去，即在抽象类里定义通用的抽象动作，而在各类的子类里，根据不同的特性，实现具体的动作，比如，在下面的代码里，我们定义了动物这个抽象类，在这个父类里，定义了小动物的呼吸和跑步等动作，并在其中以抽象方法的方式概括了“鸣叫”这个动作，而且，在子类里具体实现了这个“鸣叫 ”动作。
+	具体的PolyAnimal.java?如下：
+abstract class Animal {
+	abstract public void makeSound();
+
+	public void Breath() {
+		// 定义呼吸的动作
+	}
+
+	public void Run() {
+		// 定义走路的动作
+	}
+}
+
+class Cat extends Animal {
+	public void makeSound() {
+		System.out.println("MiMi!");
+	}
+}
+
+class Dog extends Animal {
+	public void makeSound() {
+		System.out.println("WangWang!");
+	}
+}
+
+class Sheet extends Animal {
+	public void makeSound() {
+		System.out.println("MieMie!");
+	}
+}
+
+public class PolyAnimals {
+	public static void main(String[] args) {
+		Animal dog = new Dog();
+		Animal cat = new Cat();
+		Animal sheet = new Sheet();
+		dog.makeSound();
+		cat.makeSound();
+		sheet.makeSound();
+	}
+	}
+	
+	
+	在这里大家务必要注意，只有在设计的时候，从需求上明确两个类在逻辑上有从属关系，我们才可以把它们设计成“父类和子类”的关系。
+	
+	
+	
+	我们可以把子类的相同特征到父类里，所以父类可以看成是对概念的。同样地，我们可以把相同的功能点到时接口里，从这个意义上来讲，接口是“对功能的归纳”。
+	接口用interface来标记，它便面向对象编程变的更加 灵活。从语法 上来讲，接口是一个类的表现形式，在其中可以定义一些方法，它不能包含任何方法的实现。这也是向程序员说明了一个原则：接口只能用于归纳抽象的功能点，而不能用来定义具体的实现细节。
+	下面用一个具体的代码来表现接口的特点：
+//提供了声音方面的功能
+interface Sound {
+	// 打开和关闭声音
+	public void openSound();
+
+	public void closeSound();
+}
+
+// 提供了图像方面的功能
+interface Video {
+	// 打开和关闭图像
+	public void openVideo();
+
+	public void closeVideo();
+}
+
+// 电视类
+class TV implements Sound, Video {
+	public void openSound() {
+		System.out.println("in TV open sound");
+	}
+
+	public void closeSound() {
+		System.out.println("in TV close sound");
+	}
+
+	public void openVideo() {
+		System.out.println("in TV open video");
+	}
+
+	public void closeVideo() {
+		System.out.println("in TV close video");
+	}
+}
+
+// 收音机类
+class Radio implements Sound {
+	public void openSound() {
+		System.out.println("in Radio open sound");
+	}
+
+	public void closeSound() {
+		System.out.println("in Radio close sound");
+	}
+}
+
+public class ElecApplication {
+	public static void main(String[] args) {
+		// 使用定义好的电器类
+		Radio r = new Radio();
+		r.openSound();
+		r.closeSound();
+		TV t = new TV();
+		t.openVideo();
+		t.closeVideo();
+	}
+}
+
+	为什么要使用接口？
+	接口可以用来归纳抽象点，就像抽象类一样。从使用的角度上来讲，接口是对功能的抽象，即我们可以把具有同类性质的方法归纳到一个接口里，以后凡是通过实现这个接口而生成的类，都应当具有接口里所定义的功能。
+	通过接口，我们可以把具有相同功能的类归纳到一起来管理，从表现形式上来讲，项目代码其实是实现业务逻辑功能点的组合，我们可以在弄好项目前，把一些通用的功能，比如数据库连接功能和文件读写功能，以接口的形式管理，这样我们就可以用一种类似于“搭积木”的方式，开发项目程序。
+	事实上，在后文里要讲到的组件以及架构，大来源于接口的“封闭相同功能点”的设计动机。
+	
+	
+	接口与抽象类在本质上的区别：
+	抽象类和接口是两种实现继承和扩展关系的方式，因为抽象类和接口的本质思想都是“归纳共性”，所以它们有很大的相似性。不过要理解它们的差别也不难，请大家记住：抽象类是对概念的归纳，接口是对功能 的归纳。
+	所以，在选用它们的时候，我们要从项目开发的需求出发，理解业务中的设计本质，再作出正确地选择。

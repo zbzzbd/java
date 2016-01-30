@@ -1,0 +1,84 @@
+集合
+	Collection: List / Set: ArrayList / LinkedList / HashSet
+	Map: HashMap
+泛型
+	Generic
+集合元素的排序（比较大小）
+	Comparable compareTo()//自定义排序原则，需要排序的类实现此接口
+	Comparator compare() //自定义排序原则，和需要排序的类分开 CallBack
+	
+	Collections.sort(list);//list中的元素实现了Comparable接口
+	Collections.sort(list, 比较器实例);//list中的元素按照比较器中定义的原则排序
+集合的迭代
+	Iterator
+	
+一、包装类（封装类）
+java中的简单类型
+byte / short / int / long
+char
+float / double
+boolean
+
+对应的封装类：
+Byte / Short / Integer / Long
+Charater
+Float / Double
+Boolean
+
+ArrayList list = new ArrayList();
+list.add(obj);
+
+自动装箱/拆箱
+int i = 10;     Integer m = new Integer(10);
+i = m; //自动拆箱
+m = i; //自动装箱
+
+Integer这些封装类提供了实用的方法。
+
+注意：
+1.封装类是final类
+2.封装类对象是不变的。和String类似。
+3.覆盖了Object的equals()和toString()方法
+
+二、内部类
+1.成员内部类：
+声明在类体（宿主）中，和宿主类的成员变量位置相同，具备成员变量的特征。
+在内部类中可以访问宿主类的成员变量。很常用。
+扩展：静态成员内部类: 只能访问宿主类的静态变量和静态方法。
+内部类可以定义为private
+
+2.局部内部类
+定义在方法体内。很少用到。只能访问宿主方法的final变量。
+
+成员内部类和局部内部类的作用和概念，参考成员变量和局部变量。
+
+3.匿名内部类
+没有名字的内部类。非常常用。定义方式类似于一条语句。
+记住匿名内部类的语法。
+
+模拟多继承，可以访问宿主的私有变量。
+
+注意：
+1.任何内部类都编译成独立的class文件。
+2.内部类的作用：封装。内部类很少在宿主类的外部使用。
+3.通过练习掌握成员内部类和匿名类的语法（****）.
+
+三、java中日期对象的处理
+1.java中基本时间表示方式：long(1303461335765)
+2.java提供了Date类型表示时间和日期，
+Date类是对long类型的时间日期的封装。
+3.java提供了Calendar类型做历法的抽象。
+     date.setTime(long)     cal.setTime(date)
+     ---------------->     ----------------->
+long                  Date                   Calendar
+     <----------------     <----------------
+     date.getTime()         cal.getTime()
+4.Date / Calendar对象的默认值就是当前时间。
+5.日期的格式:java.text.SimpleDateFormat类
+yyyy-MM-dd HH:mm:ss
+yyyy/MM/dd hh:mm:ss
+yyyyMMdd
+dd/MM/yyyy
+MM/dd/yyyy
+日期格式对象SimpleDateFormat可以实现Date/String的转换
+ 

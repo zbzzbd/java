@@ -1,0 +1,227 @@
+Java SE Day03
+2012/2/3
+==================== 
+  常见文本文件读取方式
+  对象的序列化
+  流的总结
+  
+
+  广义上: 数据转换为byte 序列 都是序列化
+   
+  int long 可以序列化 -> 拆分
+  String   可以序列化 --> 编码
+  Image    可以序列化(.png) -> 图片的压缩格式
+  对象(属性)可以序列化 对象编码为 byte 序列
+
+  
+7 什么是对象的序列化: 将Object转换为byte序列,就是序列化,反之叫反序列化
+  为什么要序列化: 为了在byte流中存储对象
+ 如何序列化: 使用writeObject(Object)/readObject()
+ 1) 序列化流, 是过滤流
+    ObjectOutputStream writeObject(Object) 序列化对象
+    ObjectInputStream readObject() 对象的反序列化
+ 2) 序列化接口: 对象必须实现"序列化接口"才能进行 "序列化"
+   否则出现不能序列化的异常!
+ 3) JavaBean 规范, 必须实现Serializable接口
+   Java API中的类大多是Java Bean, 基本都实现了Serializable
+ 序列化的应用:
+8 浅层复制与深层复制
+ 1) Java的默认复制规则是浅层复制, 性能好, 隔离性差
+   浅层复制现象, 只复制第一层对象
+ 2) 利用序列化实现深层复制
+
+.Java IO 总结
+ 1)是一种数据操作模型: 把任何数据都作为Byte的有序集合看待
+  逐一处理的方式方式叫做流.
+  Java 流模型, 是byte by byte 是数据集合
+   data   :  41 42 00 00 ff ff d6 d0 
+   index  :   0  1  2  3  4  5  6  7  8
+   pointer:   ^ 
+  
+  RandomAccessFile 只能操作文件, 只能处理基本类型
+  
+  节点流: 流开始和结束的地方
+  过滤器: 基本流的功能扩展
+  
+  字节流: 每次处理一个byte
+  字符流: 每次出来一个char
+  
+  ObjectInputStream in = new ObjectInputStream(
+  	 new CipherInputStream(
+	  new FileInputStream(file)));
+  Object obj = in.readObject();
+  
+  CipherInputStream in = new CipherInputStream(
+	  new FileInputStream(file)); 
+  img = ImageIO.read(in);
+  
+  装饰器模式: 流的API是按照装饰器模式设计的
+ 
+ InputStream 最基本的输入流操作模型, 是抽象类(read()是没有实现的)
+  |-- FileInputStream 实现了在文件上读取的方法 read(), 节点流
+  |-- ByteArrayInputStream 实现了在数组里读取的方法 read()
+  |-- FilterInputStream 过滤流,包装在一个基本流外部,提供功能扩展
+  |    |-- DataInputStream 为基本流扩展了基本数据类型读取
+  |    |    readInt() readDouble()...方法的底层是read()
+  |    |-- BufferedInputStream 为基本流提供缓冲处理
+  |    |-- CipherInputStream 解密输入流, 知道就行
+  |    |-- ZipInputStream 解压输入流, 知道就行
+  |-- ObjectInputStream 对象输入流, 也是过滤器
+  
+ OutputStream 最基本的输出流操作模型,是抽象类(write()是没有实现的)
+  |-- FileOutputStream 实现了在文件上写出的方法 write(), 节点流
+  |-- ByteArrayOutputStream 在变长数组上实现了write() 方法
+  |-- FilterOutputStream 
+  |    |-- DataOutputStream 基本类型输出
+  |    |
+  |    |-- BufferedOutputStream 缓冲输出
+  |    |-- CipherOutputStream 加密输出
+  |    |-- ZipOutputStream 压缩输出
+  |-- ObjectOutputStream 对象输出流
+ 
+ 字符流, 每次处理一个字符
+
+ Reader 抽象类, 定义了抽象方法read(), 每次读取一个字符
+  |-- InputStreamReader 也是过滤器, 将byte序列解码为char序列
+  |      底层也是依赖基本的byte输入流
+  |-- BufferedReader (Scanner) 是字符流过滤器,
+  |     有常用的文本读取方法readLine()
+  |-- FileReader 底层是 FileInputSream + InputStreamReader
+  |     不能指定读取文件的字符编码
+  
+ Writer 抽象类, 定义抽象方法write() 每次写出一个字符
+  |-- OutputStreamWriter 也是过滤器, 将char序列编码为byte序列
+  |      底层也是依赖基本的byte输出流
+  |-- PrintWriter 是过滤器, 提供了常用方法println()
+  |      非常常见的文本处理方法
+  |-- FileWriter = OutputStreamWriter + FileOutputStream
+  |      不能指定文本输出编码, 不好用!
+
+
+11 Java 多线程编程 
+ 1) 程序: 指令+数据的byte序列, 如: qq.exe
+ 2) 进程: 正在运行的程序, 是程序动态的执行过程(运行于主存储器)
+ 3) 线程: 在进程内部, 并发运程的过程(方法)
+ 4) 并发: 进程是并发运行的, OS将时间划分为很多时间片段, 尽可能
+   均匀分配给正在运行的程序, 微观上进程走走停停, 宏观上都在运行
+   这种都运行的现象叫: 并发, 但是不是绝对意义上的"同时"
+12 Java 创建一个线程
+ 1)Thread 类: 线程包含一个可以运行的过程(方法)
+   Thread 类中包含方法 run
+ 2) 创建一个具体线程, 需要继承于Thread类
+ 3) 覆盖run 方法(就是更新运行过程), 实现用户自己的过程
+ 4) 创建线程实例(一个线程)
+ 5) 使用线程实例的start() 方法启动线程, 启动以后线程会尽快的
+   去并发执行run()
+13 线程的状态
+  1 new 新建
+  2 Runnable 可以运行(就绪)
+  3 Running 运行(正在运行)
+  4 Block 阻塞  挂起
+  5 Dead 死亡
+14 线程状态管理: 
+  1)让出CPU
+  Thread.yield() 当前线程让出处理器(离开Running), 
+    使当前线程进入Runnable等待
+  2)休眠
+   Thread.sleep(times) 使当前线程从 Running 放弃处理器
+    进入Block状态, 休眠times毫秒, 再返回到Runnable
+    如果其他线程打断当前线程的Block(sleep), 就会发生
+    InterruptedException.
+
+15 线程的常用属性
+ 1)线程的优先级 (资源紧张时候, 尽可能优先)
+  t3.setPriority(Thread.MAX_PRIORITY);
+  默认有10 优先级, 优先级高的线程获得执行的机会多. 机会
+  的多少不能通过代码干预.
+  默认的优先级是 5
+  
+ 2)后台线程(守护线程, 精灵线程)
+  t1.setDaemon(true);
+  Java进程的结束: 当前所有前台线程都结束时, Java进程结束
+  后台线程, 不管是否结束, 都被停掉! 因为并发的现象, 后台线程
+  不会立即结束!
+ 
+ 3) 线程名字
+    getName()
+ 
+ 4) 当前线程
+   Thread main = Thread.currentThread();
+
+16 两种方式创建线程
+  1)继承Thread类 
+    a 继承Thread类, 覆盖run()方法, 提供并发运程的过程
+    b 创建这个类的实例
+    c 使用start() 方法启动线程
+  2)实现Runnable接口
+    a 实现Runnable接口, 实现run()方法, 提供并发运程的过程
+    b 创建这个类的实例, 用这个实例作为Thread构造器参数
+      创建Thread类.
+    c 使用start() 方法启动线程
+    
+    class Foo implements Runnable{
+    	public void run(){
+    		//....
+    	}
+    }
+    Thread t = new Thread(new Foo());
+    t.start();
+    
+  3)使用 内部类/匿名类 创建线程
+17 Sleep 的打断唤醒
+  1) Thread.sleep(times) 使当前线程从 Running 放弃处理器
+    进入Block状态, 休眠times毫秒, 再返回到Runnable
+  2)一个线程可以提前唤醒另外一个sleep Block的线程 
+  	interrupt() 打断/中断 
+  3) 被唤醒线程出现 中断异常
+  
+13) 异步, 同步
+  1) 异步: 并发, 各干自己的: 如: 一群人上卡车
+  2) 同步: 步调一致的处理, 如: 一群人上公交车, "伦敦制"
+
+14) 案例异步写文件
+   
+  1) 一个线程负责将控制台信息读取到内存缓冲区(集合)
+    如果控制台输入quit 将结束输入. 中断写出线程
+     
+  2) 一个线程负责将缓冲区中的信息写到硬盘文件
+    每次检查缓冲区是否有数据, 如果有就写出, 直到空为止
+    如果没有数据就休眠5秒
+    写出线程是后台线程, 可以自动结束
+   
+  3) 缓冲区采用队列(FIFO)的工作方式
+
+1 两种方式创建线程
+  1)继承Thread类 
+    a 继承Thread类, 覆盖run()方法, 提供并发运程的过程
+    b 创建这个类的实例
+    c 使用start() 方法启动线程
+  2)实现Runnable接口
+    a 实现Runnable接口, 实现run()方法, 提供并发运程的过程
+    b 创建这个类的实例, 用这个实例作为Thread构造器参数
+      创建Thread类.
+    c 使用start() 方法启动线程
+    
+    class Foo implements Runnable{
+    	public void run(){
+    		//....
+    	}
+    }
+    Thread t = new Thread(new Foo());
+    t.start();
+    
+  3)使用 内部类/匿名类 创建线程
+ 
+ 
+  
+
+
+
+
+
+
+
+
+
+
+

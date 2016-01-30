@@ -1,0 +1,58 @@
+常用API的使用
+IO Stream ： byte by byte 流
+编码集
+
+对象序列化
+int: 4 byte
+double: 8 byte
+String 5个汉字 ： 10 byte(定长编码集为例)
+Object : n byte
+
+对象是由属性(数据)组成的
+把对象变成n个byte序列的过程叫序列化
+把n个byte序列转换成为对象的过程叫反序列化
+
+API类：ObjectInputStream / ObjectOutputStream
+readObject(obj) / writeObject();
+
+Java中在Object底层支持了序列化和反序列化
+1)类实现标志接口java.io.Serializable;
+2)ObjectOutputStream.writeObject(obj);实现序列化输出
+3)ObjectInputStream.readObject();实现反序列化输入
+
+----------------------------------------
+
+线程 Thread
+
+串行 / 并行
+
+程序：静态代码段
+进程：一个程序的执行过程
+线程：一个进程内部的多个执行线索，并发进行的
+
+构造线程：run()方法是线程体
+1. 构造Thread的子类
+2. 构造Runnable接口的子类，并作为Thread类的构造器参数。
+
+启动线程
+strat()方法启动线程，不要run()方法启动线程。
+
+了解线程的生命周期状态：新建/可运行/运行/阻塞/结束
+
+线程的优先级：1-10
+
+线程状态的管理：
+Thread.yield():让当前线程让出CPU(退出Running状态)，
+	进入Runnable状态,但有可能再次被选中执行（有可能让不出）
+	
+Thread.sleep(n):让当前线程让出CPU，进入Block状态。
+	休眠n毫秒后，进入Runnable状态。一定会让出。
+如果处于Block状态的线程被其他线程打断，
+会发生InterruptedException
+
+阻塞事件：等待键盘输入
+  
+后台线程（幽灵线程，守护线程）一般是给其他线程提供服务的。
+如果当前环境里只有后台线程在运行，程序会自动终止。
+
+  

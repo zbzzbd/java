@@ -1,0 +1,81 @@
+Java SE2 Day04
+2012/2/6
+====================
+2 Sleep 的打断唤醒
+  1) Thread.sleep(times) 使当前线程从 Running 放弃处理器
+    进入Block状态, 休眠times毫秒, 再返回到Runnable
+  2)一个线程可以提前唤醒另外一个sleep Block的线程 
+  	interrupt() 打断/中断 
+  3) 被唤醒线程出现 中断异常
+  
+13) 异步 与 同步
+  1) 异步: 并发, 各干自己的: 如: 一群人上卡车
+  2) 同步: 步调一致的处理, 如: 一群人上公交车, "伦敦制"
+
+14) 案例异步写文件
+   
+  1) 一个线程负责将控制台信息读取到内存缓冲区(集合)
+    如果控制台输入quit 将结束输入. 中断写出线程
+     
+  2) 一个线程负责将缓冲区中的信息写到硬盘文件
+    每次检查缓冲区是否有数据, 如果有就写出, 直到空为止
+    如果没有数据就休眠5秒
+    写出线程是后台线程, 可以自动结束
+   
+  3) 缓冲区采用队列(FIFO)的工作方式
+
+
+1.线性并发安全问题
+ 1) 多个线程并发读写同一个临界资源时候会发生"线程并发安全问题"
+ 2) 常见的临界资源: 
+    多线程共享实例变量
+    静态公共变量 
+ 3) 使用同步代码块解决线程并发安全问题
+    synchronized(同步监视器){
+    }
+  a 同步监视器 是一个任意对象实例. 是一个多个线程之间的互
+    斥的锁机制. 多个线程要使用同一个"监视器"对象 实现同步互斥
+  b 常见写法:
+    synchronized(this){
+    }
+  c 如果方法的全部过程需要同步, 可以简单使用 synchronized
+    修饰方法.  相当于整个方法的 synchronized(this)
+  d 尽量减少同步范围, 提高并发效率
+
+2. Java中同步的API
+  1 StringBuffer 是同步的
+      synchronized append();
+    StringBuilder 不是同步的
+      append();
+  2 Vector 和 Hashtable 是同步的
+    ArrayList 和 HashMap 不是同步的
+    
+  3 Collections.synchronizedList() 
+   Collections.synchronizedMap()
+   ArrayList list = new ArrayList();
+   List syncList = Collections.synchronizedList(list);
+
+ 
+
+1 Timer(定时器)使用(java.util.Timer) 
+ 1) 可以安排自动的计划任务的类, 每个任务都是一个线程
+ 2) 创建Timer 实例
+ 3) 为Timer 实例增加计划任务, 计划任务是一个接口
+ 4) 使用cancel() 清除timer对象上所有计划任务.
+ 
+ 任务: 1 倒计时每隔一秒显示一下时间,
+      2 计时结束清楚计时任务
+
+
+  
+
+
+
+
+
+
+
+
+
+
+

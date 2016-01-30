@@ -1,0 +1,164 @@
+线程：两种构造方式：继承Thread / 实现Runnable接口
+线程体：run()
+
+new Thread(){
+	public void run(){
+		//定义线程体
+	}
+}.start();
+
+new Thread(new Rnnuable(){
+	public void run(){
+		//定义线程体
+	}
+}).start();
+
+线程的状态：
+                 <-----Block<----|
+                 |               |io/sleep
+    start()      |               |
+new ------> Runnable ---------> Running ------>dead
+                     <--------  
+                       yield
+
+线程的优先级：1-10.默认是5.优先级高的线程获得执行机会多。
+
+
+线程同步：
+临界资源：每次只允许一个进程访问的资源。
+多个线程并发访问同一个临界资源，会发生线程安全问题。
+同步锁的方式解决同步读写临界资源时的并发安全问题。
+
+同步锁(lock), 官方叫监视器(Monitor)
+
+同步关键字：synchronized
+使用方式：synchronized(同步监视器){
+			//访问临界资源的代码段
+		}
+		同步监视器：任意一个对象实例。多个线程之间的锁机制。
+		
+Object obj = new Object();
+synchronized(obj){
+	//柜台访问银行账户
+	//取1000元
+}
+synchronized(obj){
+	//ATM访问银行账户
+	//取1000元
+}
+
+常用使用方式：方法内部有一段代码需要访问临界资源，写法：
+public void method(){
+	//访问非临界资源。。。。
+	synchronized(this){
+		//访问临界资源的代码段
+	}
+}
+//如果方法的全部过程都需要同步，可以使用synchronized修饰方法。
+public synchronized void method1(){
+	//访问临界资源的代码段
+}
+
+线程命名：
+class MyThread extends Thread{....}
+MyThread myT = new MyThread("thread1");
+
+java中同步的API
+1. StringBuffer : append() 同步的
+  StringBuilder : append() 非同步的
+  
+2.Vector / Hashtable 同步的
+  ArrayList / HashMap 是非同步的
+  
+3.Collections.synchronizedList(new ArrayList());	
+
+Timer : 定时器，自动安排任务的类。
+
+Object对象的方法：
+wait() / notify() / notifyAll() 
+
+char [] buffer = new char[1];
+//线程P1负责产生随机的字符(A-Z)（生产者）
+synchronized(obj){
+	if (buffer.length == 1){
+		obj.wait();
+	}
+	if (buffer.length == 0){
+		//生产一个字符放入buffer中
+	}	
+	obj.notifyAll();
+}
+//线程P2负责吃掉P1产生的字符。（消费者）
+synchronized(obj){
+	if (buffer.length == 0){
+		obj.wait();
+	}
+	if (buffer.length == 1){
+		//把buffer中的内容吃掉
+	}
+	obj.notifyAll();
+}
+
+反射：    
+               javac       java
+源文件(*.java) ----->*.class------>执行
+
+Class类：是“类”的类型，任何类都是Class的实例。
+Person / Student / Card。。。。都是Class的实例。
+
+类加载到内存中，磁盘中的*.class文件加载为一个对象。
+这个对象就是Class的实例。
+
+元数据：描述数据的数据。
+类：描述类(静态的class文件)的类(内存中实例)。
+
+Class的实例表示一个对象运行期的状态数据。
+
+Fruit f = new ****();
+public void method(Fruit f){....}
+
+三种方式获取Class的实例：
+1)对象的getClass()方法： "abc".getClass();
+2)类型的class属性        String.class; int.class
+3)Class的静态方法forName();  Class.forName("String");
+
+基本类型和void也都对应一个Class对象。
+
+和反射相关的名词(API类)：
+类(Class), 方法(Method), 属性(Field),构造器(Constructor)
+
+Class的使用技巧：
+1)Class.forName()和Class.newInstance()方法结合使用，
+可以根据存储在字符串中的类名构造实例。
+String s = "oracle.jdbc.driver.OracleDriver";
+Object obj = Class.forName(s).newInstance();
+等价于：Object o = new Compute();
+2)虚拟机为每一种类型管理独一无二的Class对象，
+可以使用“==”操作符比较对象类型。(类似于instanceOf)
+Object e = new Employee();
+if (e.instanceOf Employee(){.....}
+if (e.getClass() == Employee.class){.....}
+ 
+总结：
+java反射机制是指：在运行期中：
+1)对于任何一个类，都能知道这个类的所有属性和方法；
+2)对于任何一个对象，都能调用它的任意一个方法。
+这种动态获取的信息，以及动态调用对象方法的功能叫做java的反射机制。
+
+java反射机制提供的功能：
+1)运行期内判断任意一个对象所属的类；
+2)运行期内判断任意一个类的对象；
+3)运行期内判断任意一个类所有可见的成员变量和方法；
+4)运行期内调用任意一个对象的方法；
+5)生成动态代理。
+
+
+
+
+
+
+
+
+
+
+
